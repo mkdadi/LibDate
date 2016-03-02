@@ -260,7 +260,7 @@ void TestDate()
     cout<<"\nChecking for operator WeekDay() const ...\n";
     Date date;
     cout<<"Initialized date to "<<date<<endl;
-    cout<<"Week Day of date is "<<WeekDay(date)<<endl<<"Success..\n";
+    cout<<"Week Day of date is "<<wstr(WeekDay(date))<<endl<<"Success..\n";
   }
 
   //To check for operator leapYear() 
@@ -330,5 +330,37 @@ void TestDate()
     cout<<"Initialized date2 to "<<date2<<endl;
     cout<<"date1>=date2 says "<<(date1>=date2)<<"\nSuccess...\n";
   }
-
+  
+  char c;
+  char *input=new char[20];
+  while(true)
+    {
+      cout<<"\nDo you want to test for any Date?y/n"<<endl;
+      cin>>c;
+      if(c!='y')
+	{
+	  cout<<"I will take that as no.\nExiting..\n";
+	  delete[] input;
+	  return;
+	}
+      cout<<"Give a date in \""<<Date::getFormat().dateFormat<<"-"
+	  <<Date::getFormat().monthFormat<<"-"<<Date::getFormat().yearFormat
+	  <<"\" format: ";
+      cin>>input;
+      Date date(input);
+      cout<<"Initialized as "<<date<<endl;
+      ++date;
+      cout<<"After ++date "<<date<<endl;
+      date++;
+      cout<<"After date++ "<<date<<endl;
+      date=date+31;
+      cout<<"After date=date+31 "<<date<<endl;
+      date=date+(-31);
+      cout<<"After date=date-(-31) "<<date<<endl;
+      cout<<"Week Number of "<<date<<" is "<<WeekNumber(date)<<endl;
+      cout<<"Month of "<<date<<" is "<<mstr(Month(date))<<endl;
+      cout<<"Week Day of "<<date<<" is "<<wstr(WeekDay(date))<<endl;
+      cout<<"Leap Year check of "<<date<<" says "<<date.leapYear()<<endl;
+    }
+  delete[] input;
 }

@@ -36,6 +36,7 @@ class DateFormat {
 
   ~DateFormat();
 
+  //private: //Made these public to make them available through Date class for output
   char* dateFormat;
   char* monthFormat;
   char* yearFormat;
@@ -97,9 +98,11 @@ class Date {
 
 };
 
-char* ToString(Month m);
+char* mstr(Month m);
 
-Month ToMonth(char* m);
+char* wstr(WeekDay w);
+
+Month cToMon(char* m);
 
 class invalid_argument : public exception
 {
@@ -107,9 +110,7 @@ class invalid_argument : public exception
   char * error;
 
   invalid_argument();
-
   invalid_argument(char*);
-
   ~invalid_argument() throw();
 
   friend ostream& operator<<(ostream&,invalid_argument&);
@@ -121,9 +122,7 @@ class domain_error :public exception
   char *error;
 
   domain_error();
-
   domain_error(char*);
-
   ~domain_error() throw();
 
   friend ostream& operator<<(ostream&,domain_error&);
@@ -135,9 +134,7 @@ class out_of_range :public exception
   char *error;
 
   out_of_range();
-
   out_of_range(char*);
-
   ~out_of_range() throw();
 
   friend ostream& operator<<(ostream&, out_of_range&);

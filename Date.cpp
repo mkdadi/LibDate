@@ -22,69 +22,70 @@ DateFormat Date::format;
 
 DateFormat::DateFormat(const char *dateFormat, const char *monthFormat, const char *yearFormat)
 {
-    this->dateFormat=new char[3];
-    this->monthFormat=new char[4];
-    this->yearFormat=new char[5];
-    strcpy(this->dateFormat,dateFormat);
-    strcpy(this->monthFormat,monthFormat);
-    strcpy(this->yearFormat,yearFormat);
+  //memory allocation
+  this->dateFormat=new char[3];
+  this->monthFormat=new char[4];
+  this->yearFormat=new char[5];
+  strcpy(this->dateFormat,dateFormat);
+  strcpy(this->monthFormat,monthFormat);
+  strcpy(this->yearFormat,yearFormat);
 }
 
 DateFormat::DateFormat(const char *format)
 {
-    char *s;
-    char *c1=new char[20];
-    strcpy(c1,format);
-    char *c=c1;
-    int j;
-    j=0;
-    s=new char[3];
-    while(*c!='-')//Storing value till first '-' comes into the day array and covert it to int using atoi()
+  char *s;
+  char *c1=new char[20];
+  strcpy(c1,format);
+  char *c=c1;
+  int j;
+  j=0;
+  s=new char[3];
+  while(*c!='-')//Storing value till first '-' comes into the day array and covert it to int using atoi()
     {
-        s[j++]=*c;
-        c++;
+      s[j++]=*c;
+      c++;
     }
-    c++;
-    s[j]='\0';
-    this->dateFormat=s;
-    j=0;
-    s=new char[4];
-    while(*c!='-')//store month similar to storage of day
+  c++;
+  s[j]='\0';
+  this->dateFormat=s;
+  j=0;
+  s=new char[4];
+  while(*c!='-')//store month similar to storage of day
     {
-        s[j++]=*c;
-        c++;
+      s[j++]=*c;
+      c++;
     }
-    c++;
-    s[j]='\0';
-    this->monthFormat=s;
-    j=0;
-    s=new char[5];
-    while(*c!='\0')
+  c++;
+  s[j]='\0';
+  this->monthFormat=s;
+  j=0;
+  s=new char[5];
+  while(*c!='\0')
     {
-        s[j++]=*c;
-        c++;
+      s[j++]=*c;
+      c++;
     }
-    s[j]='\0';
-    this->yearFormat=s;
-    delete[] c1;
+  s[j]='\0';
+  this->yearFormat=s;
+  delete[] c1;
 }
 
 
 DateFormat::DateFormat()
 {
-    this->dateFormat=new char[3];
-    this->monthFormat=new char[4];
-    this->yearFormat=new char[5];
-    strcpy(this->dateFormat,"dd");
-    strcpy(this->monthFormat,"mmm");
-    strcpy(this->yearFormat,"yy");
+  this->dateFormat=new char[3];
+  this->monthFormat=new char[4];
+  this->yearFormat=new char[5];
+  strcpy(this->dateFormat,"dd");
+  strcpy(this->monthFormat,"mmm");
+  strcpy(this->yearFormat,"yy");
 }
 
 DateFormat::~DateFormat()
 {
-    delete[] this->dateFormat;
-    delete[] this->monthFormat;
-    delete[] this->yearFormat;
+  delete[] this->dateFormat;
+  delete[] this->monthFormat;
+  delete[] this->yearFormat;
 }
 
 Date::Date(Day d, Month m, Year y)
@@ -103,9 +104,9 @@ Date::Date(Day d, Month m, Year y)
 Date::Date(const char *date)
 {
   char c[20];
-  char d[8];
-  char m[8];
-  char yr[8];
+  char d[8]; //To store the day part of date
+  char m[8]; //To store the month part of date
+  char yr[8];//To store the year part of date
   strcpy(c,date);
   int j;
   char *s=c;
@@ -147,7 +148,7 @@ Date::Date(const char *date)
     this->mon=Month(atoi(m));
   else if(strcmp(Date::format.monthFormat,"mmm")==0)
     { 
-      this->mon=ToMonth(m);
+      this->mon=cToMon(m);
     }
 
   if(strcmp(Date::format.yearFormat,"yy")==0)
@@ -169,24 +170,24 @@ Date::Date(const char *date)
 
 Date::Date()
 {
-    time_t t;
-    time(&t);
-    struct tm *temp_time=localtime(&t);
-    this->day=Day(temp_time->tm_mday);
-    this->mon=Month(temp_time->tm_mon+1);
-    this->year=temp_time->tm_year+1900;
-
-    if(this->year>2049||this->year<1950) throw out_of_range((char*)"Year must be between 1950 and 2049");
-    if(this->day==31&&(this->mon==2||this->mon==4||this->mon==6||this->mon==9||this->mon==11)) throw domain_error((char*)"Date cannot be 31 for given month");
-    if(this->day==30&&this->mon==2) throw domain_error((char*)"Date cannot be 30 for February");
-    if(this->day==29&&this->mon==2&&this->year%4!=0) throw domain_error((char*)"Date can be 29 in February only for leap years");
+  time_t t;
+  time(&t);
+  struct tm *temp_time=localtime(&t);
+  this->day=Day(temp_time->tm_mday);
+  this->mon=Month(temp_time->tm_mon+1);
+  this->year=temp_time->tm_year+1900;
+  
+  if(this->year>2049||this->year<1950) throw out_of_range((char*)"Year must be between 1950 and 2049");
+  if(this->day==31&&(this->mon==2||this->mon==4||this->mon==6||this->mon==9||this->mon==11)) throw domain_error((char*)"Date cannot be 31 for given month");
+  if(this->day==30&&this->mon==2) throw domain_error((char*)"Date cannot be 30 for February");
+  if(this->day==29&&this->mon==2&&this->year%4!=0) throw domain_error((char*)"Date can be 29 in February only for leap years");
 }
 
 Date::Date(const Date& date)
 {
-    this->day=date.day;
-    this->mon=date.mon;
-    this->year=date.year;
+  this->day=date.day;
+  this->mon=date.mon;
+  this->year=date.year;
 }
 
 Date::~Date()
@@ -194,24 +195,24 @@ Date::~Date()
 
 Date& Date::operator =(const Date& date)
 {
-    this->day=date.day;
-    this->mon=date.mon;
-    this->year=date.year;
-    return *this;
+  this->day=date.day;
+  this->mon=date.mon;
+  this->year=date.year;
+  return *this;
 }
 
 Date& Date::operator ++()
 {
-    if(this->day<28){
-        this->day=Day((int)this->day+1);
-    }
-    else if(this->day==28&&(this->year%4==0||this->mon!=2))
+  if(this->day<28){//all dates less than 28 can increase by one day and still remain in that month
+    this->day=Day((int)this->day+1);
+  }
+  else if(this->day==28&&(this->year%4==0||this->mon!=2))
     {
-        this->day=Day(29);
+      this->day=Day(29);
     }
-    else if(this->day==28&&this->mon==2)
+  else if(this->day==28&&this->mon==2)
     {
-        this->day=Day(1);
+      this->day=Day(1);
         this->mon=Month(3);
     }
     else if(this->day==29&&this->mon==2)
@@ -375,7 +376,7 @@ Date& Date::operator--(int)
       this->year--;
     }
 
-   if(this->year>2049||this->year<1950) throw out_of_range((char*)"Year must be between 1950 and 2049");
+  if(this->year>2049||this->year<1950) throw out_of_range((char*)"Year must be between 1950 and 2049");
 
   return *this;
 }
@@ -385,15 +386,15 @@ Date Date::operator+(int noOfDays)
   Date date(*this);
   if(noOfDays>0)
     {
-      for(int i=0;i<noOfDays/7;i++)
+      for(int i=0;i<noOfDays/7;i++)//date++ increases date by 7 so 7*(no_of_days)/7 times
 	{
 	  date++;
 	}
-      for(int i=0;i<noOfDays%7;i++)
+      for(int i=0;i<noOfDays%7;i++)//++date increase date by 1 so no_of_days%7 times
 	{
 	  ++date;
 	}
-    }
+    } //So totally no_of_days times
   else
     {
       noOfDays*=-1;
@@ -421,7 +422,7 @@ unsigned int Date::operator-(const Date& date)
   if(otherDate<(*this))
     {
       days=365*(this->year-otherDate.year);
-      days+=(this->year-1949)/4-(otherDate.year-1949)/4;
+      days+=(this->year-1949)/4-(otherDate.year-1949)/4; //now days = Date(1,1,this->year)-Date(1,1,date.year);
       switch(this->mon)
 	{
 	case Dec:
@@ -431,7 +432,7 @@ unsigned int Date::operator-(const Date& date)
 	case Oct:
 	  days+=30;
 	case Sep:
-	  days+=31;
+	  days+=31;            //Cummulatively adds all the months
 	case Aug:
 	  days+=31;
 	case Jul:
@@ -464,7 +465,7 @@ unsigned int Date::operator-(const Date& date)
 	  days-=31;
 	case Jul:
 	  days-=30;
-	case Jun:
+	case Jun:                //Cummulatively deletes all the days from the Smallest year
 	  days-=31;
 	case May:
 	  days-=30;
@@ -493,14 +494,14 @@ Date::operator WeekNumber() const
   Date temp(Day(1),Month(1),this->year);
   unsigned int days=temp-*this;
   int years=this->year-1950;
-  int x=7;
+  int x=7; //Since jan 1 1950 is Sunday x=7
   while(years!=0)
     {
       years--;x++;
       if(years==0) break;
       years--;x++;
       if(years==0) break;
-      years--;x++;x++;
+      years--;x++;x++;           //every year day changes by one except when its leap year where it changes by 2
       if(years==0) break;
       years--;x++;
       if(years==0) break;
@@ -523,7 +524,7 @@ Date::operator WeekNumber() const
     x=-1;break;
   }
   x+=days;
-  if(x<0) return WeekNumber(Date(*this)+(-(x+7)));
+  if(x<0) return WeekNumber(Date(*this)+(-(x+7))); //For the first few days which are not in the first week of the year
   x/=7;
   return WeekNumber(x+1);
 }
@@ -538,7 +539,7 @@ Date::operator WeekDay() const
   Date temp(Day(1),Month(1),this->year);
   unsigned int days=temp-*this;
   int years=this->year-1950;
-  int x=7;
+  int x=7; //Since jan 1 1950 is Sunday x=7
   while(years!=0)
     {
       years--;x++;
@@ -614,40 +615,21 @@ bool Date::operator>=(const Date& date)
   return !(*this<d);
 }
 
-char* ToString(Month m)
-{
-  switch(m)
-    {
-    case Jan:return (char*)"Jan";
-    case Feb:return (char*)"Feb";
-    case Mar:return (char*)"Mar";
-    case Apr:return (char*)"Apr";
-    case May:return (char*)"May";
-    case Jun:return (char*)"Jun";
-    case Jul:return (char*)"Jul";
-    case Aug:return (char*)"Aug";
-    case Sep:return (char*)"Sep";
-    case Oct:return (char*)"Oct";
-    case Nov:return (char*)"Nov";
-    case Dec:return (char*)"Dec";
-    }
-}
-
 ostream& operator<<(ostream& os,const Date& date)
 {
-  if(strcmp(Date::format.dateFormat,"d")==0)
+  if(strcmp(Date::format.dateFormat,"d")==0) //if dateFormat is equal to "d" day can be either single digit or double digit
     os<<date.day;
-  else if(strcmp(Date::format.dateFormat,"dd")==0)
-    os<<right<<setfill('0')<<setw(2)<<date.day;
-
+  else if(strcmp(Date::format.dateFormat,"dd")==0)// if dateFormat is equal to "dd" day width must be double digit
+    os<<right<<setfill('0')<<setw(2)<<date.day; //setw() decides the width of the day Here it is 2 and setfill() decides what
+                                                //to fill it with Here it is 0
   os<<"-";
 
   if(strcmp(Date::format.monthFormat,"m")==0)
     os<<date.mon;
-  else if(strcmp(Date::format.monthFormat,"mm")==0)
+  else if(strcmp(Date::format.monthFormat,"mm")==0) //Similar to day
     os<<right<<setfill('0')<<setw(2)<<date.mon;
   else if(strcmp(Date::format.monthFormat,"mmm")==0)
-    os<<ToString(date.mon);
+    os<<mstr(date.mon);//prints mon as String
 
   os<<"-";
 
@@ -659,27 +641,10 @@ ostream& operator<<(ostream& os,const Date& date)
   return os;
 }
 
-Month ToMonth(char * m)
-{
-  if(strcmp(m,"Jan")==0) return (Month)Jan;
-  else if(strcmp(m,"Feb")==0) return (Month)Feb;
-  else if(strcmp(m,"Mar")==0) return (Month)Mar;
-  else if(strcmp(m,"Apr")==0) return (Month)Apr;
-  else if(strcmp(m,"May")==0) return (Month)May;
-  else if(strcmp(m,"Jun")==0) return (Month)Jun;
-  else if(strcmp(m,"Jul")==0) return (Month)Jul;
-  else if(strcmp(m,"Aug")==0) return (Month)Aug;
-  else if(strcmp(m,"Sep")==0) return (Month)Sep;
-  else if(strcmp(m,"Oct")==0) return (Month)Oct;
-  else if(strcmp(m,"Nov")==0) return (Month)Nov;
-  else return (Month)Dec;
-}
-
-
 istream& operator>>(istream& is,Date& date)
 {
   char * input=new char[20];
-  is>>input;
+  is>>input; //takes Date as input string in DateFormat format it is better to print DateFormat whenever asking for input
   Date d(input);
   date.day=d.day;
   date.mon=d.mon;
@@ -700,6 +665,55 @@ void Date::setFormat(DateFormat& df)
 DateFormat& Date::getFormat()
 {
   return Date::format;
+}
+
+char* mstr(Month m)//To output the Month as char*
+{
+  switch(m)
+    {
+    case Jan:return (char*)"Jan";
+    case Feb:return (char*)"Feb";
+    case Mar:return (char*)"Mar";
+    case Apr:return (char*)"Apr";
+    case May:return (char*)"May";
+    case Jun:return (char*)"Jun";
+    case Jul:return (char*)"Jul";
+    case Aug:return (char*)"Aug";
+    case Sep:return (char*)"Sep";
+    case Oct:return (char*)"Oct";
+    case Nov:return (char*)"Nov";
+    case Dec:return (char*)"Dec";
+    }
+}
+
+char* wstr(WeekDay w)//To output WeekDay as char*
+{
+  switch(w)
+    {
+    case Sun:return (char*)"Sun";
+    case Mon:return (char*)"Mon";
+    case Tue:return (char*)"Tue";
+    case Wed:return (char*)"Wed";
+    case Thu:return (char*)"Thu";
+    case Fri:return (char*)"Fri";
+    case Sat:return (char*)"Sat";
+    }
+}
+
+Month cToMon(char * m) //To take the input char* as month
+{
+  if(strcmp(m,"Jan")==0) return (Month)Jan;
+  else if(strcmp(m,"Feb")==0) return (Month)Feb;
+  else if(strcmp(m,"Mar")==0) return (Month)Mar;
+  else if(strcmp(m,"Apr")==0) return (Month)Apr;
+  else if(strcmp(m,"May")==0) return (Month)May;
+  else if(strcmp(m,"Jun")==0) return (Month)Jun;
+  else if(strcmp(m,"Jul")==0) return (Month)Jul;
+  else if(strcmp(m,"Aug")==0) return (Month)Aug;
+  else if(strcmp(m,"Sep")==0) return (Month)Sep;
+  else if(strcmp(m,"Oct")==0) return (Month)Oct;
+  else if(strcmp(m,"Nov")==0) return (Month)Nov;
+  else return (Month)Dec;
 }
 
 invalid_argument::invalid_argument()

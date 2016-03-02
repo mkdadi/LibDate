@@ -1,0 +1,140 @@
+Initializing Test Set...
+Constructing Objects of Date class using Date(Day,Month,Year) constructor
+Succesfully created Date object for Date 27-Nov-96
+
+Checking for exceptions in Date construction...
+Checking for invalid_argument exception...
+invalid_argument error: Date > 31
+Success..
+
+Checking for domain_error exception...
+domain_error error: Date cannot be 30 for February
+Success..
+
+Checking for out_of_range exception...
+out_of_range error: Year must be between 1950 and 2049
+Success..
+
+Checking for Date(const char*) constructor..
+Succesfully created Date object for Date 25-Oct-95
+
+Checking for exceptions in Date construction...
+Checking for invalid_argument exception...
+invalid_argument error: Date > 31
+Success..
+
+Checking for domain_error exception...
+domain_error error: Date can be 29 in February only for leap years
+Success..
+
+Checking out_of_range exception...
+out_of_range error: Year must be between 1950 and 2049
+Success..
+
+Checking default Date Constuctor..
+Successfully created Date 02-Mar-16
+
+Exception in default Date Constructor is expected when current year exceeds 2049,
+So it can't be checked now
+But expect it to give exception for those conditions
+
+Checking for Copy constructor...
+Initialized date1 to 21-Jun-94
+Success.. both date1 and date2 are 21-Jun-94
+
+Checking for Assignment operator...
+Initialized date1 to 27-Mar-87
+Success.. both date1 and date2 are 27-Mar-87
+
+Checking for operator++ ...
+Initialized date to 27-Nov-96
+Success.. after ++date , date is 28-Nov-96
+
+Checking for operator++(int) ...
+Initialized date to 27-Nov-96
+Success.. after date++ , date is 04-Dec-96
+
+Checking for operator-- ...
+Initialized date to 27-Nov-96
+Success.. after --date , date is 26-Nov-96
+
+Checking for operator--(int) ...
+Initialized date to 27-Nov-96
+Success.. after date-- , date is 20-Nov-96
+
+Checking for operator-(const Date&) ...
+Initialized date1 to 27-Nov-96
+Initialized date2 to 25-Oct-15
+Success.. no of days between date1 and date2 = 6906
+
+Checking for operator+(int) when int is positive ...
+Initialized date1 to 27-Nov-96
+Initialized n to 6906
+Success.. date1 + n = 25-Oct-15
+
+Checking for operator+(int) when int is negative ...
+Initialized date1 to 25-Oct-15
+Initialized n to -6906
+Success.. date1 + n = 27-Nov-96
+
+Checking for exceptions in operator+(int) ...
+Initialized date1 to 27-Nov-41
+Initialized n to 6906
+out_of_range error: Year must be between 1950 and 2049
+Success..
+
+Checking for operator WeekNumber() const ...
+Initialized date to 27-Nov-96
+Week Number of date is 48
+Success..
+
+Checking for operator Month() const ...
+Initialized date to 27-Nov-96
+Month of date is 11
+Success..
+
+Checking for operator WeekDay() const ...
+Initialized date to 02-Mar-16
+Week Day of date is Wed
+Success..
+
+Checking for leapYear() ...
+Initialized date to 27-Nov-96
+Leap Year check of date says 1
+Success..
+
+Checking for operator==(const Date&) ..
+Initialized date1 to 27-Nov-96
+Initialized date2 to 27-Oct-96
+date1==date2 says 0
+Success...
+
+Checking for operator!=(const Date&) ..
+Initialized date1 to 27-Nov-96
+Initialized date2 to 27-Oct-96
+date1!=date2 says 1
+Success...
+
+Checking for operator<(const Date&) ..
+Initialized date1 to 27-Nov-96
+Initialized date2 to 27-Oct-96
+date1<date2 says 0
+Success...
+
+Checking for operator<=(const Date&) ..
+Initialized date1 to 27-Nov-96
+Initialized date2 to 27-Oct-96
+date1<=date2 says 0
+Success...
+
+Checking for operator>(const Date&) ..
+Initialized date1 to 27-Nov-96
+Initialized date2 to 27-Oct-96
+date1>date2 says 1
+Success...
+
+Checking for operator>=(const Date&) ..
+Initialized date1 to 27-Nov-96
+Initialized date2 to 27-Oct-96
+date1>=date2 says 1
+Success...
