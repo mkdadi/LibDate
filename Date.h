@@ -1,4 +1,5 @@
 #include <iostream>
+#include <exception>
 
 using namespace std;
 
@@ -99,3 +100,45 @@ class Date {
 char* ToString(Month m);
 
 Month ToMonth(char* m);
+
+class invalid_argument : public exception
+{
+ public:
+  char * error;
+
+  invalid_argument();
+
+  invalid_argument(char*);
+
+  ~invalid_argument() throw();
+
+  friend ostream& operator<<(ostream&,invalid_argument&);
+};
+
+class domain_error :public exception
+{
+ public:
+  char *error;
+
+  domain_error();
+
+  domain_error(char*);
+
+  ~domain_error() throw();
+
+  friend ostream& operator<<(ostream&,domain_error&);
+};
+
+class out_of_range :public exception
+{
+ public:
+  char *error;
+
+  out_of_range();
+
+  out_of_range(char*);
+
+  ~out_of_range() throw();
+
+  friend ostream& operator<<(ostream&, out_of_range&);
+};
