@@ -18,8 +18,11 @@
 #include <cstring>
 #include <ctime>
 #include <cstdlib>
+#include <iomanip>
 
 using namespace std;
+
+DateFormat Date::format;
 
 DateFormat::DateFormat(const char *dateFormat, const char *monthFormat, const char *yearFormat)
 {
@@ -95,41 +98,61 @@ Date::Date(Day d, Month m, Year y)
 
 Date::Date(const char *date)
 {
-    char *c=new char[12];
-    strcpy(c,date);
-    int j;
-    char *s=c;
-    char *tempV=new char[5];
-    j=0;
-    while(*s!='-')
+  char *c=new char[12];
+  char *d=new char[8];
+  char *m=new char[8];
+  char *yr=new char[8];
+  strcpy(c,date);
+  int j;
+  char *s=c;
+  char *tempV=new char[5];
+  j=0;
+  while(*s!='-')
     {
-        tempV[j]=*s;
-        j++;
-        s++;
+      tempV[j]=*s;
+      j++;
+      s++;
     }
-    s++;
-    tempV[j]='\0';
-    this->day=Day(atoi(tempV));
-    j=0;
-    while(*s!='-')
+  s++;
+  tempV[j]='\0';
+  strcpy(d,tempV);
+  j=0;
+  while(*s!='-')
     {
-        tempV[j]=*s;
-        j++;
-        s++;
+      tempV[j]=*s;
+      j++;
+      s++;
     }
-    s++;
-    tempV[j]='\0';
-    this->mon=Month(atoi(tempV));
-    j=0;
-    while(*s!='\0')
+  s++;
+  tempV[j]='\0';
+  strcpy(m,tempV);
+  j=0;
+  while(*s!='\0')
     {
-        tempV[j]=*s;
-        j++;
-        s++;
+      tempV[j]=*s;
+      j++;
+      s++;
     }
-    tempV[j]='\0';
-    unsigned int year=atoi(tempV);
-    this->year=(year<50)?year+2000:(year<100)?year+1900:year;
+  tempV[j]='\0';
+  strcpy(yr,tempV);
+  
+  this->day=Day(atoi(d));
+
+  if(strcmp(Date::format.monthFormat,"m")==0
+     ||strcmp(Date::format.monthFormat,"mm")==0)
+    this->mon=Month(atoi(m));
+  else if(strcmp(Date::format.monthFormat,"mmm")==0)
+    { 
+      this->mon=ToMonth(m);
+    }
+
+  if(strcmp(Date::format.yearFormat,"yy")==0)
+    {
+      int y=atoi(yr);
+      this->year=(y>=50)?y+=1900:y+=2000;
+    }
+  else if(strcmp(Date::format.yearFormat,"yyyy")==0)
+    this->year=atoi(yr);
 }
 
 Date::Date()
@@ -258,25 +281,114 @@ Date& Date::operator ++(int i)
     return *this;
 }
 
+Date& Date::operator--()
+{
+   if(this->day>1)
+     {
+       this->day=Day((int)this->day-1);
+     }
+   else if(this->year%4==0&&this->mon==3)
+     {
+       this->day=Day(29);
+       this->mon=Month(2);
+     }
+   else if(this->mon==3)
+     {
+       this->day=Day(28);
+       this->mon=Month(2);
+     }
+   else if(this->mon==5||this->mon==7||this->mon==10||this->mon==12)
+     {
+       this->day=Day(30);
+       this->mon=Month((int)this->mon-1);
+     }
+   else if(this->mon!=1)
+     {
+       this->day=Day(31);
+       this->mon=Month((int)this->mon-1);
+     }
+   else
+     {
+       this->day=Day(31);
+       this->mon=Month(12);
+       this->year--;
+     }
+   return *this;
+}
+
+Date& Date::operator--(int)
+{
+
+  if(this->day>7)
+    {
+      this->day=Day((int)this->day-7);
+    }
+  else if(this->year%4==0&&this->mon==3)
+    {
+      this->day=Day(29+(int)this->day-7);
+      this->mon=Month(2);
+    }
+  else if(this->mon==3)
+    {
+      this->day=Day(28+(int)this->day-7);
+      this->mon=Month(2);
+    }
+  else if(this->mon==5||this->mon==7||this->mon==10||this->mon==12)
+    {
+      this->day=Day((int)this->day+30-7);
+      this->mon=Month((int)this->mon-1);
+    }
+  else if(this->mon!=1)
+    {
+      this->mon=Month((int)this->mon-1);
+      this->day=Day((int)this->day+31-7);
+    }
+  else
+    {
+      this->day=Day((int)this->day+31-7);
+      this->mon=Month(12);
+      this->year--;
+    }
+  return *this;
+}
+
 Date Date::operator+(int noOfDays)
 {
-    for(int i=0;i<noOfDays/7;i++)
+  if(noOfDays>0)
     {
-        ++(*this);
+      for(int i=0;i<noOfDays/7;i++)
+	{
+	  (*this)++;
+	}
+      for(int i=0;i<noOfDays%7;i++)
+	{
+	  ++(*this);
+	}
     }
-    for(int i=0;i<noOfDays%7;i++)
+  else
     {
-        (*this)++;
+      noOfDays*=-1;
+      for(int i=0;i<noOfDays/7;i++)
+	{
+	  (*this)--;
+	}
+      for(int i=0;i<noOfDays%7;i++)
+	{
+	  --(*this);
+	}
     }
     return *this;
 }
 
-//unsigned int Date::operator-(const Date& otherDate)
-//{
-//    unsigned int * days=new unsigned int;
-//    *days=365*(this->year-otherDate.year);
-//    *days+=(this->year-otherDate.year)/4;
-//}
+unsigned int Date::operator-(const Date& otherDate)
+{
+    unsigned int days;
+    if(otherDate<(*this))
+      {
+	days=365*(this->year-otherDate.year);
+	days+=(this->year-otherDate.year)/4;
+      }
+}
 
 
 Date::operator WeekNumber() const
@@ -285,7 +397,7 @@ Date::operator WeekNumber() const
   unsigned int days=temp-*this;
   int years=this->year-1950;
   int x=7;
-  while(true)
+  while(years!=0)
     {
       years--;x++;
       if(years==0) break;
@@ -299,23 +411,23 @@ Date::operator WeekNumber() const
   WeekDay d=WeekDay((x%7==0)?7:x%7);
   switch(d){
   case Mon:
-    x=3;break;
-  case Tue:
-    x=2;break;
-  case Wed:
-    x=1;break;
-  case Thu:
     x=0;break;
+  case Tue:
+    x=1;break;
+  case Wed:
+    x=2;break;
+  case Thu:
+    x=3;break;
   case Fri:
-    x=-1;break;
+    x=-3;break;
   case Sat:
     x=-2;break;
   case Sun:
-    x=-3;break;
+    x=-1;break;
   }
   x+=days;
   x/=7;
-  return WeekNumber(x);
+  return WeekNumber(x+1);
 }
 
 Date::operator Month() const
@@ -325,11 +437,11 @@ Date::operator Month() const
 
 Date::operator WeekDay() const
 {
-Date temp(Day(1),Month(1),this->year);
+  Date temp(Day(1),Month(1),this->year);
   unsigned int days=temp-*this;
   int years=this->year-1950;
   int x=7;
-  while(true)
+  while(years!=0)
     {
       years--;x++;
       if(years==0) break;
@@ -350,4 +462,141 @@ bool Date::leapYear() const
   if((int)this->year%4==0)
     return true;
   else return false;
+}
+
+bool Date::operator==(const Date& d)
+{
+  if(this->day==d.day&&this->mon==d.mon
+     &&this->year==d.year)
+    return true;
+  else return false;
+}
+
+bool Date::operator!=(const Date& d)
+{
+  Date d1(d);
+  return !(d1==*this);
+}
+
+bool Date::operator<(const Date& date)
+{
+  Date d(date);
+  if(this->year<d.year) return true;
+  else if(this->year==d.year)
+    {
+      if(this->mon<d.mon) return true;
+      else if(this->mon==d.mon&&this->day<d.day)return true;
+      else return false;
+    }
+  else return false;
+}
+
+bool Date::operator<=(const Date& date)
+{
+  Date d(date);
+  return !(d>*this);
+}
+
+bool Date::operator>(const Date& date)
+{
+  Date d(date);
+  if(this->year>d.year) return true;
+  else if(this->year==d.year)
+    {
+      if(this->mon>d.mon) return true;
+      else if(this->mon==d.mon&&this->day>d.day)return true;
+      else return false;
+    }
+  else return false;
+}
+
+bool Date::operator>=(const Date& date)
+{
+  Date d(date);
+  return !(d<*this);
+}
+
+char* ToString(Month m)
+{
+  switch(m)
+    {
+    case Jan:return (char*)"Jan";
+    case Feb:return (char*)"Feb";
+    case Mar:return (char*)"Mar";
+    case Apr:return (char*)"Apr";
+    case May:return (char*)"May";
+    case Jun:return (char*)"Jun";
+    case Jul:return (char*)"Jul";
+    case Aug:return (char*)"Aug";
+    case Sep:return (char*)"Sep";
+    case Oct:return (char*)"Oct";
+    case Nov:return (char*)"Nov";
+    case Dec:return (char*)"Dec";
+    }
+}
+
+ostream& operator<<(ostream& os,const Date& date)
+{
+  if(strcmp(Date::format.dateFormat,"d")==0)
+    os<<date.day;
+  else if(strcmp(Date::format.dateFormat,"dd")==0)
+    os<<right<<setfill('0')<<setw(2)<<date.day;
+
+  os<<"-";
+
+  if(strcmp(Date::format.monthFormat,"m")==0)
+    os<<date.mon;
+  else if(strcmp(Date::format.monthFormat,"mm")==0)
+    os<<right<<setfill('0')<<setw(2)<<date.mon;
+  else if(strcmp(Date::format.monthFormat,"mmm")==0)
+    os<<ToString(date.mon);
+
+  os<<"-";
+
+  if(strcmp(Date::format.yearFormat,"yy")==0)
+    os<<(((int)date.year<2000)?date.year-1900:date.year-2000);
+  else if(strcmp(Date::format.yearFormat,"yyyy")==0)
+    os<<date.year;
+
+  return os;
+}
+
+Month ToMonth(char * m)
+{
+  if(strcmp(m,"Jan")==0) return (Month)Jan;
+  else if(strcmp(m,"Feb")==0) return (Month)Feb;
+  else if(strcmp(m,"Mar")==0) return (Month)Mar;
+  else if(strcmp(m,"Apr")==0) return (Month)Apr;
+  else if(strcmp(m,"May")==0) return (Month)May;
+  else if(strcmp(m,"Jun")==0) return (Month)Jun;
+  else if(strcmp(m,"Jul")==0) return (Month)Jul;
+  else if(strcmp(m,"Aug")==0) return (Month)Aug;
+  else if(strcmp(m,"Sep")==0) return (Month)Sep;
+  else if(strcmp(m,"Oct")==0) return (Month)Oct;
+  else if(strcmp(m,"Nov")==0) return (Month)Nov;
+  else if(strcmp(m,"Dec")==0) return (Month)Dec;
+}
+
+
+istream& operator>>(istream& is,Date& date)
+{
+  char * input=new char[20];
+  is>>input;
+  Date d(input);
+  date.day=d.day;
+  date.mon=d.mon;
+  date.year=d.year;
+  return is;
+}
+
+void Date::setFormat(DateFormat& df)
+{
+  strcpy(Date::format.dateFormat,df.dateFormat);
+  strcpy(Date::format.monthFormat,df.monthFormat);
+  strcpy(Date::format.yearFormat,df.yearFormat);
+}
+
+DateFormat& Date::getFormat()
+{
+  return Date::format;
 }

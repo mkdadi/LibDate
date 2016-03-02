@@ -35,7 +35,6 @@ class DateFormat {
 
   ~DateFormat();
 
- private:
   char* dateFormat;
   char* monthFormat;
   char* yearFormat;
@@ -80,10 +79,6 @@ class Date {
   bool operator>(const Date&);
   bool operator>=(const Date&);
 
-  //Basic I/O using Friend functions
-  friend ostream& operator<<(ostream&,const Date&);
-  friend istream& operator>>(istream&,const Date&);
-
   //Format Function
   static void setFormat(DateFormat&);
   static DateFormat& getFormat();
@@ -93,4 +88,14 @@ class Date {
   Day day;
   Month mon;
   Year year;
+
+ public:
+  //Basic I/O using Friend functions
+  friend ostream& operator <<(ostream&,const Date&);
+  friend istream& operator >>(istream&,Date&);
+
 };
+
+char* ToString(Month m);
+
+Month ToMonth(char* m);
