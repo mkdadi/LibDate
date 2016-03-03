@@ -1,5 +1,20 @@
 #ifndef My_Date_h
-#define My_Date_h 1
+#define My_Date_h 
+
+/*
+*@file : Date.h
+*
+*@author (A) : Madhu Kumar Dadi.
+*@version : 25-2-2016
+*
+*header file for the Date Class and DateFormat class and their exceptions
+*
+*This work is licensed under the
+*Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+*International License. To view a copy of this license,
+*visit http://creativecommons.org/licenses/by-nc-sa/4.0/.
+*
+*/
 
 #include <iostream>
 #include <exception>
@@ -39,6 +54,8 @@ class DateFormat {
 
   ~DateFormat();
 
+
+  //Whenever you use these functions you have to manually delete the pointers
   char* getdateFormat(); //To provide dateFormat with making it changeable
   char* getmonthFormat();//To provide monthFormat with making it changeable
   char* getyearFormat(); //To provide yearFormat with making it changeable
@@ -117,11 +134,17 @@ class invalid_argument : public exception
 {
  public:
   char * error;
-
+  
+  //constructor
   invalid_argument();
+
+  //constructor with error string
   invalid_argument(char*);
+
+  //destructor
   ~invalid_argument() throw();
 
+  //Output Stream Operator
   friend ostream& operator<<(ostream&,invalid_argument&);
 };
 
@@ -130,10 +153,16 @@ class domain_error :public exception
  public:
   char *error;
 
+  //constructor
   domain_error();
+
+  //constructor with error string
   domain_error(char*);
+
+  //destructor
   ~domain_error() throw();
 
+  //Output Stream Operator
   friend ostream& operator<<(ostream&,domain_error&);
 };
 
@@ -142,10 +171,16 @@ class out_of_range :public exception
  public:
   char *error;
 
+  //constructor
   out_of_range();
+
+  //constructor with error string
   out_of_range(char*);
+
+  //destructor
   ~out_of_range() throw();
 
+  //Output Stream Operator
   friend ostream& operator<<(ostream&, out_of_range&);
 };
 
