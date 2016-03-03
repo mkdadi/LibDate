@@ -1,3 +1,6 @@
+#ifndef My_Date_h
+#define My_Date_h 1
+
 #include <iostream>
 #include <exception>
 
@@ -36,7 +39,13 @@ class DateFormat {
 
   ~DateFormat();
 
-  //private: //Made these public to make them available through Date class for output
+  char* getdateFormat(); //To provide dateFormat with making it changeable
+  char* getmonthFormat();//To provide monthFormat with making it changeable
+  char* getyearFormat(); //To provide yearFormat with making it changeable
+
+  void swap(DateFormat&); //To swap Pointers in the objects when you want to
+                          //assign a new value to the object in other classes 
+ private:
   char* dateFormat;
   char* monthFormat;
   char* yearFormat;
@@ -139,3 +148,5 @@ class out_of_range :public exception
 
   friend ostream& operator<<(ostream&, out_of_range&);
 };
+
+#endif

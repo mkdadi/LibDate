@@ -331,7 +331,7 @@ void TestDate()
     cout<<"date1>=date2 says "<<(date1>=date2)<<"\nSuccess...\n";
   }
   
-  char c;
+  char c,*mf,*df1,*yf;
   char *input=new char[20];
   while(true)
     {
@@ -343,24 +343,37 @@ void TestDate()
 	  delete[] input;
 	  return;
 	}
-      cout<<"Give a date in \""<<Date::getFormat().dateFormat<<"-"
-	  <<Date::getFormat().monthFormat<<"-"<<Date::getFormat().yearFormat
-	  <<"\" format: ";
+
+      df1=Date::getFormat().getdateFormat();
+      mf=Date::getFormat().getmonthFormat();
+      yf=Date::getFormat().getyearFormat();
+
+      cout<<"Give a date in \""<<df1<<"-"<<mf<<"-"<<yf<<"\" format: ";
       cin>>input;
-      Date date(input);
-      cout<<"Initialized as "<<date<<endl;
-      ++date;
-      cout<<"After ++date "<<date<<endl;
-      date++;
-      cout<<"After date++ "<<date<<endl;
-      date=date+31;
-      cout<<"After date=date+31 "<<date<<endl;
-      date=date+(-31);
-      cout<<"After date=date-(-31) "<<date<<endl;
-      cout<<"Week Number of "<<date<<" is "<<WeekNumber(date)<<endl;
-      cout<<"Month of "<<date<<" is "<<mstr(Month(date))<<endl;
-      cout<<"Week Day of "<<date<<" is "<<wstr(WeekDay(date))<<endl;
-      cout<<"Leap Year check of "<<date<<" says "<<date.leapYear()<<endl;
+      try
+	{
+	  Date date(input);
+	  cout<<"Initialized as "<<date<<endl;
+	  ++date;
+	  cout<<"After ++date "<<date<<endl;
+	  date++;
+	  cout<<"After date++ "<<date<<endl;
+	  date=date+31;
+	  cout<<"After date=date+31 "<<date<<endl;
+	  date=date+(-31);
+	  cout<<"After date=date-(-31) "<<date<<endl;
+	  cout<<"Week Number of "<<date<<" is "<<WeekNumber(date)<<endl;
+	  cout<<"Month of "<<date<<" is "<<mstr(Month(date))<<endl;
+	  cout<<"Week Day of "<<date<<" is "<<wstr(WeekDay(date))<<endl;
+	  cout<<"Leap Year check of "<<date<<" says "<<date.leapYear()<<endl;
+	}
+      catch(invalid_argument& e){cout<<e;}
+      catch(domain_error& e){cout<<e;}
+      catch(out_of_range& e){cout<<e;}
+
+      delete[] df1;
+      delete[] mf;
+      delete[] yf;
     }
   delete[] input;
 }

@@ -88,6 +88,43 @@ DateFormat::~DateFormat()
   delete[] this->yearFormat;
 }
 
+char* DateFormat::getdateFormat()
+{
+  char *temp=new char[5];
+  strcpy(temp,this->dateFormat);
+  return temp;
+}
+
+char* DateFormat::getmonthFormat()
+{
+  char *temp=new char[5];
+  strcpy(temp,this->monthFormat);
+  return temp;
+}
+
+char* DateFormat::getyearFormat()
+{
+  char *temp=new char[5];
+  strcpy(temp,this->yearFormat);
+  return temp;
+}
+
+void DateFormat::swap(DateFormat& df)
+{
+  char *temp;
+  temp=this->dateFormat;
+  this->dateFormat=df.dateFormat;
+  df.dateFormat=temp;
+
+  temp=this->monthFormat;
+  this->monthFormat=df.monthFormat;
+  df.monthFormat=temp;
+
+  temp=this->yearFormat;
+  this->yearFormat=df.yearFormat;
+  df.yearFormat=temp;
+}
+
 Date::Date(Day d, Month m, Year y)
 {
   this->day=d;
@@ -143,21 +180,29 @@ Date::Date(const char *date)
   
   this->day=Day(atoi(d));
 
-  if(strcmp(Date::format.monthFormat,"m")==0
-     ||strcmp(Date::format.monthFormat,"mm")==0)
+  char* yf=Date::format.getyearFormat();
+  char* df=Date::format.getdateFormat();
+  char* mf=Date::format.getmonthFormat();
+
+  if(strcmp(mf,"m")==0
+     ||strcmp(mf,"mm")==0)
     this->mon=Month(atoi(m));
-  else if(strcmp(Date::format.monthFormat,"mmm")==0)
+  else if(strcmp(mf,"mmm")==0)
     { 
       this->mon=cToMon(m);
     }
 
-  if(strcmp(Date::format.yearFormat,"yy")==0)
+  if(strcmp(yf,"yy")==0)
     {
       int y=atoi(yr);
       this->year=(y>=50)?y+=1900:y+=2000;
     }
-  else if(strcmp(Date::format.yearFormat,"yyyy")==0)
+  else if(strcmp(yf,"yyyy")==0)
     this->year=atoi(yr);
+
+  delete[] df;
+  delete[] mf;
+  delete[] yf;
 
   if(this->day>31) throw invalid_argument((char*)"Date > 31");
   if(this->mon>12) throw invalid_argument((char*)"Month > 12");
@@ -617,26 +662,35 @@ bool Date::operator>=(const Date& date)
 
 ostream& operator<<(ostream& os,const Date& date)
 {
-  if(strcmp(Date::format.dateFormat,"d")==0) //if dateFormat is equal to "d" day can be either single digit or double digit
+
+  char* yf=Date::format.getyearFormat();
+  char* df=Date::format.getdateFormat();
+  char* mf=Date::format.getmonthFormat();
+
+  if(strcmp(df,"d")==0) //if dateFormat is equal to "d" day can be either single digit or double digit
     os<<date.day;
-  else if(strcmp(Date::format.dateFormat,"dd")==0)// if dateFormat is equal to "dd" day width must be double digit
+  else if(strcmp(df,"dd")==0)// if dateFormat is equal to "dd" day width must be double digit
     os<<right<<setfill('0')<<setw(2)<<date.day; //setw() decides the width of the day Here it is 2 and setfill() decides what
                                                 //to fill it with Here it is 0
   os<<"-";
 
-  if(strcmp(Date::format.monthFormat,"m")==0)
+  if(strcmp(mf,"m")==0)
     os<<date.mon;
-  else if(strcmp(Date::format.monthFormat,"mm")==0) //Similar to day
+  else if(strcmp(mf,"mm")==0) //Similar to day
     os<<right<<setfill('0')<<setw(2)<<date.mon;
-  else if(strcmp(Date::format.monthFormat,"mmm")==0)
+  else if(strcmp(mf,"mmm")==0)
     os<<mstr(date.mon);//prints mon as String
 
   os<<"-";
 
-  if(strcmp(Date::format.yearFormat,"yy")==0)
+  if(strcmp(yf,"yy")==0)
     os<<(((int)date.year<2000)?date.year-1900:date.year-2000);
-  else if(strcmp(Date::format.yearFormat,"yyyy")==0)
+  else if(strcmp(yf,"yyyy")==0)
     os<<date.year;
+
+  delete[] yf;
+  delete[] mf;
+  delete[] df;
 
   return os;
 }
@@ -657,9 +711,7 @@ istream& operator>>(istream& is,Date& date)
 
 void Date::setFormat(DateFormat& df)
 {
-  strcpy(Date::format.dateFormat,df.dateFormat);
-  strcpy(Date::format.monthFormat,df.monthFormat);
-  strcpy(Date::format.yearFormat,df.yearFormat);
+  Date::format.swap(df);
 }
 
 DateFormat& Date::getFormat()
