@@ -760,16 +760,16 @@ char* wstr(WeekDay w)//To output WeekDay as char*
 Month cToMon(char * m) //To take the input char* as month
 {
   if(strcmp(m,"Jan")==0) return (Month)Jan;
-  else if(strcmp(m,"Feb")==0) return (Month)Feb;
-  else if(strcmp(m,"Mar")==0) return (Month)Mar;
-  else if(strcmp(m,"Apr")==0) return (Month)Apr;
-  else if(strcmp(m,"May")==0) return (Month)May;
-  else if(strcmp(m,"Jun")==0) return (Month)Jun;
-  else if(strcmp(m,"Jul")==0) return (Month)Jul;
-  else if(strcmp(m,"Aug")==0) return (Month)Aug;
-  else if(strcmp(m,"Sep")==0) return (Month)Sep;
-  else if(strcmp(m,"Oct")==0) return (Month)Oct;
-  else if(strcmp(m,"Nov")==0) return (Month)Nov;
+  else if(strcasecmp(m,"Feb")==0) return (Month)Feb;
+  else if(strcasecmp(m,"Mar")==0) return (Month)Mar;
+  else if(strcasecmp(m,"Apr")==0) return (Month)Apr;
+  else if(strcasecmp(m,"May")==0) return (Month)May;
+  else if(strcasecmp(m,"Jun")==0) return (Month)Jun;
+  else if(strcasecmp(m,"Jul")==0) return (Month)Jul;
+  else if(strcasecmp(m,"Aug")==0) return (Month)Aug;
+  else if(strcasecmp(m,"Sep")==0) return (Month)Sep;
+  else if(strcasecmp(m,"Oct")==0) return (Month)Oct;
+  else if(strcasecmp(m,"Nov")==0) return (Month)Nov;
   else return (Month)Dec;
 }
 
