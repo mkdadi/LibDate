@@ -32,7 +32,7 @@ out_of_range error: Year must be between 1950 and 2049
 Success..
 
 Checking default Date Constuctor..
-Successfully created Date 02-Mar-16
+Successfully created Date 04-Mar-16
 
 Exception in default Date Constructor is expected when current year exceeds 2049,
 So it can't be checked now
@@ -94,8 +94,8 @@ Month of date is 11
 Success..
 
 Checking for operator WeekDay() const ...
-Initialized date to 02-Mar-16
-Week Day of date is Wed
+Initialized date to 04-Mar-16
+Week Day of date is Fri
 Success..
 
 Checking for leapYear() ...

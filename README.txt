@@ -46,8 +46,8 @@ Functions
 		"This functions gives a copy of yearFormat String"  
 		
 	* Swapping Operation
-		`void swap(DateFormat& dFormat);`  
-		"Swaps pointers of members in current object and dFormat"   
+		`void copy(DateFormat& dFormat);`  
+		"Copies format from dFormat to current object and dFormat"   
 
 
 * Date

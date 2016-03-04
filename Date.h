@@ -60,7 +60,7 @@ class DateFormat {
   char* getmonthFormat();//To provide monthFormat with making it changeable
   char* getyearFormat(); //To provide yearFormat with making it changeable
 
-  void swap(DateFormat&); //To swap Pointers in the objects when you want to
+  void copy(DateFormat&); //To copy the formats when you want to
                           //assign a new value to the object in other classes 
  private:
   char* dateFormat;

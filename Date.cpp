@@ -114,20 +114,11 @@ char* DateFormat::getyearFormat()
   return temp;
 }
 
-void DateFormat::swap(DateFormat& df)
+void DateFormat::copy(DateFormat& df)
 {
-  char *temp;
-  temp=this->dateFormat;
-  this->dateFormat=df.dateFormat;
-  df.dateFormat=temp;
-
-  temp=this->monthFormat;
-  this->monthFormat=df.monthFormat;
-  df.monthFormat=temp;
-
-  temp=this->yearFormat;
-  this->yearFormat=df.yearFormat;
-  df.yearFormat=temp;
+  strcpy(this->dateFormat,df.dateFormat);
+  strcpy(this->monthFormat,df.monthFormat);
+  strcpy(this->yearFormat,df.yearFormat);
 }
 
 Date::Date(Day d, Month m, Year y)
@@ -716,7 +707,7 @@ istream& operator>>(istream& is,Date& date)
 
 void Date::setFormat(DateFormat& df)
 {
-  Date::format.swap(df);
+  Date::format.copy(df);
 }
 
 DateFormat& Date::getFormat()
