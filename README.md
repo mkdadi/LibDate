@@ -4,6 +4,8 @@ _Date library for C++_
 
 >"This library provides with various functions to work on **Dates** ranging in the years 1-1-1950 to 31-12-2049, and also on different formats for printing and scanning dates. Functions available through this library are mentioned below"
 
+_**Installation procedure for this library is given in releases section, please take a look before trying**_
+
 #### Data Types
 * Day
 * WeekDay
