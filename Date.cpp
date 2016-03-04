@@ -127,7 +127,9 @@ Date::Date(Day d, Month m, Year y)
   this->mon=m;
   this->year=y;
   if(d>31) throw invalid_argument((char*)"Date > 31");
+  if(d<1) throw invalid_argument((char*)"Date < 1");
   if(m>12) throw invalid_argument((char*)"Month > 12");
+  if(m<1) throw invalid_argument((char*)"Month < 1");
   if(y>2049||y<1950) throw out_of_range((char*)"Year must be between 1950 and 2049");
   if(d==31&&(m==2||m==4||m==6||m==9||m==11)) throw domain_error((char*)"Date cannot be 31 for given month");
   if(d==30&&m==2) throw domain_error((char*)"Date cannot be 30 for February");
@@ -201,7 +203,9 @@ Date::Date(const char *date)
   delete[] yf;
 
   if(this->day>31) throw invalid_argument((char*)"Date > 31");
+  if(this->day<1) throw invalid_argument((char*)"Date > 1");
   if(this->mon>12) throw invalid_argument((char*)"Month > 12");
+  if(this->mon<1) throw invalid_argument((char*)"Month < 1");
   if(this->year>2049||this->year<1950) throw out_of_range((char*)"Year must be between 1950 and 2049");
   if(this->day==31&&(this->mon==2||this->mon==4||this->mon==6||this->mon==9||this->mon==11)) throw domain_error((char*)"Date cannot be 31 for given month");
   if(this->day==30&&this->mon==2) throw domain_error((char*)"Date cannot be 30 for February");
@@ -750,7 +754,7 @@ char* wstr(WeekDay w)//To output WeekDay as char*
 
 Month cToMon(char * m) //To take the input char* as month
 {
-  if(strcmp(m,"Jan")==0) return (Month)Jan;
+  if(strcasecmp(m,"Jan")==0) return (Month)Jan;
   else if(strcasecmp(m,"Feb")==0) return (Month)Feb;
   else if(strcasecmp(m,"Mar")==0) return (Month)Mar;
   else if(strcasecmp(m,"Apr")==0) return (Month)Apr;
