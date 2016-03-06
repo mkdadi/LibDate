@@ -203,7 +203,7 @@ Date::Date(const char *date)
   delete[] yf;
 
   if(this->day>31) throw invalid_argument((char*)"Date > 31");
-  if(this->day<1) throw invalid_argument((char*)"Date > 1");
+  if(this->day<1) throw invalid_argument((char*)"Date < 1");
   if(this->mon>12) throw invalid_argument((char*)"Month > 12");
   if(this->mon<1) throw invalid_argument((char*)"Month < 1");
   if(this->year>2049||this->year<1950) throw out_of_range((char*)"Year must be between 1950 and 2049");
@@ -536,6 +536,13 @@ unsigned int Date::operator-(const Date& date)
 
 Date::operator WeekNumber() const
 {
+  if(this->mon==12)
+    {
+      Date temp1(Day(1),Month(1),Year(this->year+1));
+      if(WeekDay(temp1)==2&&this->day==31) return WeekNumber(1);
+      if(WeekDay(temp1)==3&&this->day>=30) return WeekNumber(1);
+      if(WeekDay(temp1)==4&&this->day>=29) return WeekNumber(1);
+    }
   Date temp(Day(1),Month(1),this->year);
   unsigned int days=temp-*this;
   int years=this->year-1950;
@@ -684,7 +691,7 @@ ostream& operator<<(ostream& os,const Date& date)
   os<<"-";
 
   if(strcmp(yf,"yy")==0)
-    os<<(((int)date.year<2000)?date.year-1900:date.year-2000);
+    os<<right<<setfill('0')<<setw(2)<<(((int)date.year<2000)?date.year-1900:date.year-2000);
   else if(strcmp(yf,"yyyy")==0)
     os<<date.year;
 
